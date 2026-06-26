@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#0D0F14" />
+  <meta name="description" content="Remove passwords and unlock PDF permissions — runs entirely in your browser, no upload needed." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="PDF Unlocker" />
+  <title>PDF Unlocker</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- Install banner (shown when PWA installable) -->
+  <div id="installBanner">
+    <span style="font-size:22px">📲</span>
+    <div class="banner-text">
+      <strong>Add to Home Screen</strong>
+      Use offline, anytime — no browser needed
+    </div>
+    <button id="btnInstall">Install</button>
+    <button id="btnDismiss" title="Dismiss">✕</button>
+  </div>
+
+  <div class="header">
+    <div class="lock-icon">🔓</div>
+    <h1>PDF Unlocker</h1>
+    <p>Remove passwords &amp; unlock permissions — private &amp; offline</p>
+  </div>
+
+  <div class="card">
+    <!-- Drop zone -->
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" accept=".pdf" />
+      <div class="drop-icon">📄</div>
+      <div class="label">Tap to choose a PDF</div>
+      <div class="sub">or drag &amp; drop here</div>
+    </div>
+
+    <!-- Selected file info -->
+    <div class="file-info" id="fileInfo">
+      <span class="pdf-badge">PDF</span>
+      <span class="fname" id="fileName">—</span>
+      <span class="fsize" id="fileSize">—</span>
+      <button class="btn-clear" id="btnClear" title="Remove">✕</button>
+    </div>
+
+    <!-- Password -->
+    <div id="passwordSection">
+      <div class="field-label">Password (if protected)</div>
+      <div class="password-wrap">
+        <input type="password" id="pwInput" placeholder="Leave blank if none" autocomplete="off" />
+        <button class="toggle-pw" id="togglePw">👁</button>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="status loading" id="statusLoading">
+      <div class="spinner"></div>
+      <span>Unlocking your PDF…</span>
+    </div>
+    <div class="status success-msg" id="statusSuccess">
+      <span>✅</span><span>PDF unlocked — ready to download</span>
+    </div>
+    <div class="status error-msg" id="statusError">
+      <span>⚠️</span><span id="errorText">Something went wrong.</span>
+    </div>
+
+    <button class="btn-unlock" id="btnUnlock" disabled>Unlock PDF</button>
+    <button class="btn-download" id="btnDownload">⬇ Download Unlocked PDF</button>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-item"><div class="dot"></div><span>All processing happens locally — your file never leaves your device.</span></div>
+    <div class="info-item"><div class="dot"></div><span>Removes open password, owner restrictions, print/copy/edit locks.</span></div>
+    <div class="info-item"><div class="dot"></div><span>Works offline once installed as an app.</span></div>
+  </div>
+
+</div>
+
+<div id="offlineToast">📶 You're offline — app still works!</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

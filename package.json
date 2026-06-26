@@ -1,0 +1,13 @@
+{
+  "name": "pdf-unlocker",
+  "version": "1.0.0",
+  "description": "Client-side PWA to remove PDF passwords and permissions",
+  "scripts": {
+    "dev": "bunx serve . -p 3000",
+    "icons": "node generate-icons.js"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "^1.0.1",
+    "serve": "^14.2.3"
+  }
+}
