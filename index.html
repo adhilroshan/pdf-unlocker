@@ -3,90 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <meta name="theme-color" content="#0D0F14" />
-  <meta name="description" content="Remove passwords and unlock PDF permissions — runs entirely in your browser, no upload needed." />
+  <meta name="theme-color" content="#080A0F" />
+  <meta name="description" content="A toolkit of PDF utilities — unlock, protect, merge, split, compress, convert. Runs entirely in your browser." />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="PDF Unlocker" />
-  <title>PDF Unlocker</title>
+  <meta name="apple-mobile-web-app-title" content="PDF Toolkit" />
+  <title>PDF Toolkit</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 <div class="app">
 
-  <!-- Install banner (shown when PWA installable) -->
   <div id="installBanner">
-    <span style="font-size:22px">📲</span>
+    <span style="font-size:20px;flex-shrink:0">📲</span>
     <div class="banner-text">
       <strong>Add to Home Screen</strong>
-      Use offline, anytime — no browser needed
+      <span>Works offline, no browser needed</span>
     </div>
     <button id="btnInstall">Install</button>
-    <button id="btnDismiss" title="Dismiss">✕</button>
+    <button id="btnDismiss">✕</button>
   </div>
 
-  <div class="header">
-    <div class="lock-icon">🔓</div>
-    <h1>PDF Unlocker</h1>
-    <p>Remove passwords &amp; unlock permissions — private &amp; offline</p>
+  <div class="home-hero">
+    <div class="home-badge">
+      <svg viewBox="0 0 64 64" width="64" height="64" fill="none">
+        <defs>
+          <linearGradient id="hg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00E5C8"/>
+            <stop offset="100%" stop-color="#7C6AF7"/>
+          </linearGradient>
+        </defs>
+        <rect x="10" y="8" width="32" height="40" rx="4" fill="url(#hg)" opacity="0.12"/>
+        <rect x="10" y="8" width="32" height="40" rx="4" stroke="url(#hg)" stroke-width="2"/>
+        <path d="M42 8 L54 20 L42 20 Z" fill="url(#hg)" opacity="0.5"/>
+        <rect x="16" y="22" width="20" height="2.5" rx="1.25" fill="url(#hg)"/>
+        <rect x="16" y="29" width="20" height="2.5" rx="1.25" fill="url(#hg)" opacity="0.6"/>
+        <rect x="16" y="36" width="13" height="2.5" rx="1.25" fill="url(#hg)" opacity="0.6"/>
+      </svg>
+    </div>
+    <h1>PDF <span>Toolkit</span></h1>
+    <p>Private, offline-first PDF tools — nothing ever leaves your device</p>
   </div>
 
-  <div class="card">
-    <!-- Drop zone -->
-    <div class="drop-zone" id="dropZone">
-      <input type="file" id="fileInput" accept=".pdf" />
-      <div class="drop-icon">📄</div>
-      <div class="label">Tap to choose a PDF</div>
-      <div class="sub">or drag &amp; drop here</div>
-    </div>
+  <div class="tool-grid">
+    <a href="unlock.html" class="tool-card t-unlock">
+      <div class="tool-icon-box">🔓</div>
+      <h3>Unlock PDF</h3>
+      <p>Remove passwords &amp; permission locks</p>
+    </a>
 
-    <!-- Selected file info -->
-    <div class="file-info" id="fileInfo">
-      <span class="pdf-badge">PDF</span>
-      <span class="fname" id="fileName">—</span>
-      <span class="fsize" id="fileSize">—</span>
-      <button class="btn-clear" id="btnClear" title="Remove">✕</button>
-    </div>
+    <a href="protect.html" class="tool-card t-protect">
+      <div class="tool-icon-box">🔒</div>
+      <h3>Protect PDF</h3>
+      <p>Add a password to a PDF</p>
+    </a>
 
-    <!-- Password -->
-    <div id="passwordSection">
-      <div class="field-label">Password (if protected)</div>
-      <div class="password-wrap">
-        <input type="password" id="pwInput" placeholder="Leave blank if none" autocomplete="off" />
-        <button class="toggle-pw" id="togglePw">👁</button>
-      </div>
-    </div>
+    <a href="merge-split.html" class="tool-card t-merge">
+      <div class="tool-icon-box">📑</div>
+      <h3>Merge &amp; Split</h3>
+      <p>Combine or break apart pages</p>
+    </a>
 
-    <!-- Status -->
-    <div class="status loading" id="statusLoading">
-      <div class="spinner"></div>
-      <span>Unlocking your PDF…</span>
-    </div>
-    <div class="status success-msg" id="statusSuccess">
-      <span>✅</span><span>PDF unlocked — ready to download</span>
-    </div>
-    <div class="status error-msg" id="statusError">
-      <span>⚠️</span><span id="errorText">Something went wrong.</span>
-    </div>
+    <a href="compress.html" class="tool-card t-compress">
+      <div class="tool-icon-box">📉</div>
+      <h3>Compress PDF</h3>
+      <p>Shrink file size, keep quality</p>
+    </a>
 
-    <button class="btn-unlock" id="btnUnlock" disabled>Unlock PDF</button>
-    <button class="btn-download" id="btnDownload">⬇ Download Unlocked PDF</button>
+    <a href="convert.html" class="tool-card t-convert" style="grid-column: span 2;">
+      <div class="tool-icon-box">🖼️</div>
+      <h3>PDF ↔ Images</h3>
+      <p>Convert pages to JPG/PNG or build a PDF from images</p>
+    </a>
   </div>
 
   <div class="info-strip">
-    <div class="info-item"><div class="dot"></div><span>All processing happens locally — your file never leaves your device.</span></div>
-    <div class="info-item"><div class="dot"></div><span>Removes open password, owner restrictions, print/copy/edit locks.</span></div>
-    <div class="info-item"><div class="dot"></div><span>Works offline once installed as an app.</span></div>
+    <div class="info-item"><div class="info-dot"></div><span>Fully local — files never leave your device</span></div>
+    <div class="info-item"><div class="info-dot"></div><span>Works offline once installed</span></div>
   </div>
 
 </div>
 
-<div id="offlineToast">📶 You're offline — app still works!</div>
+<div id="offlineToast">● offline — cached version active</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-<script src="app.js"></script>
+<script src="shared.js" type="module"></script>
 </body>
 </html>

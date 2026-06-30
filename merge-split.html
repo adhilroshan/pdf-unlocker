@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#080A0F" />
+  <meta name="description" content="Merge multiple PDFs into one, or split a PDF into separate pages — runs entirely in your browser." />
+  <title>Merge & Split PDF — PDF Toolkit</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+  <a href="index.html" class="back-link">← All tools</a>
+
+  <div id="installBanner">
+    <span style="font-size:20px;flex-shrink:0">📲</span>
+    <div class="banner-text"><strong>Add to Home Screen</strong><span>Works offline, no browser needed</span></div>
+    <button id="btnInstall">Install</button>
+    <button id="btnDismiss">✕</button>
+  </div>
+
+  <div class="tool-header" style="--tool-bg: rgba(245,166,35,0.1); --tool-border: rgba(245,166,35,0.25); --tool-glow: rgba(245,166,35,0.18);">
+    <div class="tool-header-icon">📑</div>
+    <h1>Merge <span style="color:#F5A623">&amp; Split</span></h1>
+    <p>Combine PDFs into one, or break one apart</p>
+  </div>
+
+  <!-- Mode switcher -->
+  <div class="segment-control" style="width:100%;max-width:420px">
+    <input type="radio" name="mode" id="modeMerge" checked />
+    <label for="modeMerge">Merge</label>
+    <input type="radio" name="mode" id="modeSplit" />
+    <label for="modeSplit">Split</label>
+  </div>
+
+  <!-- ═══ MERGE PANEL ═══ -->
+  <div class="card" id="mergeCard">
+    <div class="card-inner">
+      <div class="card-section">
+        <div class="file-list" id="mergeFileList"></div>
+        <div class="add-more-btn" id="addMoreWrap" style="margin-top:10px">
+          <input type="file" id="mergeFileInput" accept=".pdf" multiple />
+          <span>+ Add PDF files</span>
+        </div>
+      </div>
+
+      <div class="progress-section" id="mergeProgressWrap">
+        <div class="progress-header"><span id="mergeLoadingText">Merging…</span><span id="mergeProgressLabel">0%</span></div>
+        <div class="progress-track"><div id="mergeProgressBar"></div></div>
+      </div>
+
+      <div class="status loading" id="mergeStatusLoading">
+        <div class="spinner"></div>
+        <span style="font-family:'DM Mono',monospace;font-size:12.5px;color:var(--muted2)">Merging…</span>
+      </div>
+      <div class="status success-msg" id="mergeStatusSuccess">
+        <span class="status-icon">✦</span><span style="font-size:13.5px">Merged — ready to download</span>
+      </div>
+      <div class="status error-msg" id="mergeStatusError">
+        <span class="status-icon">✕</span><span id="mergeErrorText" style="font-size:13.5px">Something went wrong.</span>
+      </div>
+
+      <div class="btn-section">
+        <button class="btn-unlock" id="btnMerge" disabled style="background:linear-gradient(110deg,#F5A623,#00E5C8);box-shadow:0 2px 20px rgba(245,166,35,0.2)">Merge PDFs</button>
+        <button class="btn-download" id="btnMergeDownload">↓ Download Merged PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SPLIT PANEL ═══ -->
+  <div class="card" id="splitCard" style="display:none">
+    <div class="card-inner">
+      <div class="card-section" id="splitDropSection">
+        <div class="drop-zone" id="splitDropZone">
+          <input type="file" id="splitFileInput" accept=".pdf" />
+          <div class="drop-icon-ring">📄</div>
+          <div class="dz-label">Choose a PDF file</div>
+          <div class="dz-sub">or drag &amp; drop here</div>
+        </div>
+        <div class="file-info" id="splitFileInfo">
+          <div class="pdf-badge"><div class="corner"></div></div>
+          <div class="file-meta"><span class="fname" id="splitFileName">—</span><span class="fsize" id="splitFileSize">—</span></div>
+          <button class="btn-clear" id="splitBtnClear" title="Remove">✕</button>
+        </div>
+      </div>
+
+      <div class="card-section" id="splitOptionsSection" style="display:none">
+        <div class="field-label">Split Mode</div>
+        <div class="segment-control">
+          <input type="radio" name="splitMode" id="splitAll" checked />
+          <label for="splitAll">Every page</label>
+          <input type="radio" name="splitMode" id="splitRange" />
+          <label for="splitRange">Page range</label>
+        </div>
+        <div id="rangeInputWrap" style="display:none;margin-top:12px">
+          <div class="field-label">Pages (e.g. 1-3, 5, 8-10)</div>
+          <div class="password-wrap"><input type="text" id="rangeInput" placeholder="1-3, 5, 8-10" /></div>
+        </div>
+      </div>
+
+      <div class="progress-section" id="splitProgressWrap">
+        <div class="progress-header"><span id="splitLoadingText">Splitting…</span><span id="splitProgressLabel">0%</span></div>
+        <div class="progress-track"><div id="splitProgressBar"></div></div>
+      </div>
+
+      <div class="status loading" id="splitStatusLoading">
+        <div class="spinner"></div>
+        <span style="font-family:'DM Mono',monospace;font-size:12.5px;color:var(--muted2)">Splitting…</span>
+      </div>
+      <div class="status error-msg" id="splitStatusError">
+        <span class="status-icon">✕</span><span id="splitErrorText" style="font-size:13.5px">Something went wrong.</span>
+      </div>
+
+      <div class="card-section" id="splitResultsSection" style="display:none">
+        <div class="result-list" id="splitResultList"></div>
+      </div>
+
+      <div class="btn-section">
+        <button class="btn-unlock" id="btnSplit" disabled style="background:linear-gradient(110deg,#F5A623,#00E5C8);box-shadow:0 2px 20px rgba(245,166,35,0.2)">Split PDF</button>
+        <button class="btn-download-all" id="btnDownloadAll" style="display:none">↓ Download All as ZIP</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-item"><div class="info-dot"></div><span>Fully local — your files never leave the device</span></div>
+  </div>
+</div>
+
+<div id="offlineToast">● offline — cached version active</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="merge-split.js" type="module"></script>
+</body>
+</html>

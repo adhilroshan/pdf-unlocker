@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#080A0F" />
+  <meta name="description" content="Remove passwords and unlock PDF permissions — runs entirely in your browser." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Unlock PDF — PDF Toolkit</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <a href="index.html" class="back-link">← All tools</a>
+
+  <div id="installBanner">
+    <span style="font-size:20px;flex-shrink:0">📲</span>
+    <div class="banner-text"><strong>Add to Home Screen</strong><span>Works offline, no browser needed</span></div>
+    <button id="btnInstall">Install</button>
+    <button id="btnDismiss">✕</button>
+  </div>
+
+  <div class="lock-hero">
+    <div class="lock-svg-wrap" id="lockWrap">
+      <svg id="lockSvg" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="88" y2="88" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00E5C8"/><stop offset="100%" stop-color="#7C6AF7"/>
+          </linearGradient>
+          <linearGradient id="shackleGrad" x1="20" y1="0" x2="68" y2="50" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00E5C8"/><stop offset="100%" stop-color="#5BE8D5"/>
+          </linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <g id="shackle" filter="url(#glow)">
+          <path d="M30 46 L30 30 Q30 14 44 14 Q58 14 58 28" stroke="url(#shackleGrad)" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+        </g>
+        <g id="lockBody">
+          <rect x="16" y="44" width="56" height="38" rx="9" fill="url(#bodyGrad)" opacity="0.15"/>
+          <rect x="16" y="44" width="56" height="38" rx="9" stroke="url(#bodyGrad)" stroke-width="1.5" fill="none"/>
+          <circle cx="44" cy="61" r="6" fill="url(#bodyGrad)" opacity="0.8"/>
+          <rect x="41" y="61" width="6" height="9" rx="2" fill="url(#bodyGrad)" opacity="0.8"/>
+        </g>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>Unlock <span>PDF</span></h1>
+      <p>AES-256 · RC4 · permissions · Aadhaar</p>
+    </div>
+  </div>
+
+  <div class="card" id="mainCard">
+    <div class="card-inner">
+      <div class="card-section" id="dropSection">
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="fileInput" accept=".pdf" />
+          <div class="drop-icon-ring">📄</div>
+          <div class="dz-label">Choose a PDF file</div>
+          <div class="dz-sub">or drag &amp; drop here</div>
+        </div>
+        <div class="file-info" id="fileInfo">
+          <div class="pdf-badge"><div class="corner"></div></div>
+          <div class="file-meta"><span class="fname" id="fileName">—</span><span class="fsize" id="fileSize">—</span></div>
+          <button class="btn-clear" id="btnClear" title="Remove">✕</button>
+        </div>
+      </div>
+
+      <div class="card-section" id="passwordSection">
+        <div class="field-label">Password</div>
+        <div class="password-wrap">
+          <input type="password" id="pwInput" placeholder="Leave blank if none" autocomplete="off" />
+          <button class="toggle-pw" id="togglePw">👁</button>
+        </div>
+      </div>
+
+      <div class="progress-section" id="progressWrap">
+        <div class="progress-header"><span id="loadingText">Processing…</span><span id="progressLabel">0%</span></div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="status loading" id="statusLoading">
+        <div class="spinner"></div>
+        <span style="font-family:'DM Mono',monospace;font-size:12.5px;color:var(--muted2)">Decrypting…</span>
+      </div>
+      <div class="status success-msg" id="statusSuccess">
+        <span class="status-icon">✦</span><span style="font-size:13.5px">PDF unlocked — ready to download</span>
+      </div>
+      <div class="status error-msg" id="statusError">
+        <span class="status-icon">✕</span><span id="errorText" style="font-size:13.5px">Something went wrong.</span>
+      </div>
+
+      <div class="btn-section">
+        <button class="btn-unlock" id="btnUnlock" disabled>Unlock PDF</button>
+        <button class="btn-download" id="btnDownload">↓ Download Unlocked PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-item"><div class="info-dot"></div><span>Fully local — your file never leaves the device</span></div>
+    <div class="info-item"><div class="info-dot"></div><span>Supports AES-256, RC4, and permission-only locks</span></div>
+  </div>
+
+</div>
+
+<div id="offlineToast">● offline — cached version active</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="unlock.js" type="module"></script>
+</body>
+</html>

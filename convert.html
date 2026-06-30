@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#080A0F" />
+  <meta name="description" content="Convert PDF pages to images, or build a PDF from images — runs entirely in your browser." />
+  <title>PDF ↔ Images — PDF Toolkit</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+  <a href="index.html" class="back-link">← All tools</a>
+
+  <div id="installBanner">
+    <span style="font-size:20px;flex-shrink:0">📲</span>
+    <div class="banner-text"><strong>Add to Home Screen</strong><span>Works offline, no browser needed</span></div>
+    <button id="btnInstall">Install</button>
+    <button id="btnDismiss">✕</button>
+  </div>
+
+  <div class="tool-header" style="--tool-bg: rgba(91,156,247,0.1); --tool-border: rgba(91,156,247,0.25); --tool-glow: rgba(91,156,247,0.18);">
+    <div class="tool-header-icon">🖼️</div>
+    <h1>PDF <span style="color:#5B9CF7">↔ Images</span></h1>
+    <p>Convert pages to images, or images into a PDF</p>
+  </div>
+
+  <div class="segment-control" style="width:100%;max-width:420px">
+    <input type="radio" name="convMode" id="modeToImg" checked />
+    <label for="modeToImg">PDF → Images</label>
+    <input type="radio" name="convMode" id="modeToPdf" />
+    <label for="modeToPdf">Images → PDF</label>
+  </div>
+
+  <!-- ═══ PDF → IMAGES ═══ -->
+  <div class="card" id="toImgCard">
+    <div class="card-inner">
+      <div class="card-section" id="toImgDropSection">
+        <div class="drop-zone" id="toImgDropZone">
+          <input type="file" id="toImgFileInput" accept=".pdf" />
+          <div class="drop-icon-ring">📄</div>
+          <div class="dz-label">Choose a PDF file</div>
+          <div class="dz-sub">or drag &amp; drop here</div>
+        </div>
+        <div class="file-info" id="toImgFileInfo">
+          <div class="pdf-badge"><div class="corner"></div></div>
+          <div class="file-meta"><span class="fname" id="toImgFileName">—</span><span class="fsize" id="toImgFileSize">—</span></div>
+          <button class="btn-clear" id="toImgBtnClear" title="Remove">✕</button>
+        </div>
+      </div>
+
+      <div class="card-section" id="toImgOptionsSection" style="display:none">
+        <div class="field-label">Output Format</div>
+        <div class="segment-control">
+          <input type="radio" name="imgFormat" id="fmtPng" checked />
+          <label for="fmtPng">PNG</label>
+          <input type="radio" name="imgFormat" id="fmtJpg" />
+          <label for="fmtJpg">JPG</label>
+        </div>
+      </div>
+
+      <div class="progress-section" id="toImgProgressWrap">
+        <div class="progress-header"><span id="toImgLoadingText">Converting…</span><span id="toImgProgressLabel">0%</span></div>
+        <div class="progress-track"><div id="toImgProgressBar"></div></div>
+      </div>
+
+      <div class="status loading" id="toImgStatusLoading">
+        <div class="spinner"></div>
+        <span style="font-family:'DM Mono',monospace;font-size:12.5px;color:var(--muted2)">Converting…</span>
+      </div>
+      <div class="status error-msg" id="toImgStatusError">
+        <span class="status-icon">✕</span><span id="toImgErrorText" style="font-size:13.5px">Something went wrong.</span>
+      </div>
+
+      <div class="card-section" id="toImgResultsSection" style="display:none">
+        <div class="result-list" id="toImgResultList"></div>
+      </div>
+
+      <div class="btn-section">
+        <button class="btn-unlock" id="btnToImg" disabled style="background:linear-gradient(110deg,#5B9CF7,#7C6AF7);box-shadow:0 2px 20px rgba(91,156,247,0.2)">Convert to Images</button>
+        <button class="btn-download-all" id="btnToImgDownloadAll" style="display:none">↓ Download All as ZIP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ IMAGES → PDF ═══ -->
+  <div class="card" id="toPdfCard" style="display:none">
+    <div class="card-inner">
+      <div class="card-section">
+        <div class="file-list" id="imgFileList"></div>
+        <div class="add-more-btn" id="addImgWrap" style="margin-top:10px">
+          <input type="file" id="imgFileInput" accept="image/*" multiple />
+          <span>+ Add images</span>
+        </div>
+      </div>
+
+      <div class="progress-section" id="toPdfProgressWrap">
+        <div class="progress-header"><span id="toPdfLoadingText">Building PDF…</span><span id="toPdfProgressLabel">0%</span></div>
+        <div class="progress-track"><div id="toPdfProgressBar"></div></div>
+      </div>
+
+      <div class="status loading" id="toPdfStatusLoading">
+        <div class="spinner"></div>
+        <span style="font-family:'DM Mono',monospace;font-size:12.5px;color:var(--muted2)">Building PDF…</span>
+      </div>
+      <div class="status success-msg" id="toPdfStatusSuccess">
+        <span class="status-icon">✦</span><span style="font-size:13.5px">PDF created — ready to download</span>
+      </div>
+      <div class="status error-msg" id="toPdfStatusError">
+        <span class="status-icon">✕</span><span id="toPdfErrorText" style="font-size:13.5px">Something went wrong.</span>
+      </div>
+
+      <div class="btn-section">
+        <button class="btn-unlock" id="btnToPdf" disabled style="background:linear-gradient(110deg,#5B9CF7,#7C6AF7);box-shadow:0 2px 20px rgba(91,156,247,0.2)">Create PDF</button>
+        <button class="btn-download" id="btnToPdfDownload">↓ Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-item"><div class="info-dot"></div><span>Fully local — your files never leave the device</span></div>
+  </div>
+</div>
+
+<div id="offlineToast">● offline — cached version active</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="convert.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#080A0F" />
+  <meta name="description" content="Shrink PDF file size while keeping quality — runs entirely in your browser." />
+  <title>Compress PDF — PDF Toolkit</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+  <a href="index.html" class="back-link">← All tools</a>
+
+  <div id="installBanner">
+    <span style="font-size:20px;flex-shrink:0">📲</span>
+    <div class="banner-text"><strong>Add to Home Screen</strong><span>Works offline, no browser needed</span></div>
+    <button id="btnInstall">Install</button>
+    <button id="btnDismiss">✕</button>
+  </div>
+
+  <div class="tool-header" style="--tool-bg: rgba(0,229,160,0.1); --tool-border: rgba(0,229,160,0.25); --tool-glow: rgba(0,229,160,0.18);">
+    <div class="tool-header-icon">📉</div>
+    <h1>Compress <span style="color:var(--success)">PDF</span></h1>
+    <p>Reduce file size while keeping readability</p>
+  </div>
+
+  <div class="card" id="mainCard">
+    <div class="card-inner">
+      <div class="card-section" id="dropSection">
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="fileInput" accept=".pdf" />
+          <div class="drop-icon-ring">📄</div>
+          <div class="dz-label">Choose a PDF file</div>
+          <div class="dz-sub">or drag &amp; drop here</div>
+        </div>
+        <div class="file-info" id="fileInfo">
+          <div class="pdf-badge"><div class="corner"></div></div>
+          <div class="file-meta"><span class="fname" id="fileName">—</span><span class="fsize" id="fileSize">—</span></div>
+          <button class="btn-clear" id="btnClear" title="Remove">✕</button>
+        </div>
+      </div>
+
+      <div class="card-section" id="qualitySection" style="display:none">
+        <div class="field-label">Compression Level</div>
+        <div class="slider-row">
+          <input type="range" id="qualitySlider" min="1" max="3" step="1" value="2" />
+          <div class="slider-labels">
+            <span>Smaller file</span>
+            <span id="qualityLabel">Balanced</span>
+            <span>Higher quality</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-section" id="progressWrap">
+        <div class="progress-header"><span id="loadingText">Compressing…</span><span id="progressLabel">0%</span></div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="status loading" id="statusLoading">
+        <div class="spinner"></div>
+        <span style="font-family:'DM Mono',monospace;font-size:12.5px;color:var(--muted2)">Compressing…</span>
+      </div>
+      <div class="status success-msg" id="statusSuccess">
+        <span class="status-icon">✦</span><span id="successText" style="font-size:13.5px">Compressed — ready to download</span>
+      </div>
+      <div class="status error-msg" id="statusError">
+        <span class="status-icon">✕</span><span id="errorText" style="font-size:13.5px">Something went wrong.</span>
+      </div>
+
+      <div class="btn-section">
+        <button class="btn-unlock" id="btnCompress" disabled style="background:linear-gradient(110deg,#00E5A0,#00E5C8);box-shadow:0 2px 20px rgba(0,229,160,0.2)">Compress PDF</button>
+        <button class="btn-download" id="btnDownload">↓ Download Compressed PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-item"><div class="info-dot"></div><span>Fully local — your file never leaves the device</span></div>
+    <div class="info-item"><div class="info-dot"></div><span>Best for scanned or image-heavy PDFs</span></div>
+  </div>
+</div>
+
+<div id="offlineToast">● offline — cached version active</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="compress.js" type="module"></script>
+</body>
+</html>

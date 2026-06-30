@@ -1,11 +1,11 @@
 {
-  "name": "PDF Unlocker",
-  "short_name": "PDF Unlock",
-  "description": "Remove passwords and unlock permissions from PDF files — runs entirely in your browser.",
+  "name": "PDF Toolkit",
+  "short_name": "PDF Toolkit",
+  "description": "Unlock, protect, merge, split, compress, and convert PDFs — entirely in your browser.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0D0F14",
-  "theme_color": "#0D0F14",
+  "background_color": "#080A0F",
+  "theme_color": "#080A0F",
   "orientation": "portrait-primary",
   "icons": [
     {

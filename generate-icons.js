@@ -14,54 +14,56 @@ if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 function drawIcon(size) {
   const canvas = createCanvas(size, size);
   const ctx = canvas.getContext('2d');
-  const r = size * 0.208; // corner radius ~40/192
+  const r = size * 0.208;
 
-  // Background rounded rect
   const bg = ctx.createLinearGradient(0, 0, size, size);
-  bg.addColorStop(0, '#1E2A4A');
-  bg.addColorStop(1, '#2A1E4A');
+  bg.addColorStop(0, '#0E1118');
+  bg.addColorStop(1, '#080A0F');
   ctx.beginPath();
   ctx.roundRect(0, 0, size, size, r);
   ctx.fillStyle = bg;
   ctx.fill();
 
-  // Accent gradient helper
   function accentGrad(x0, y0, x1, y1) {
     const g = ctx.createLinearGradient(x0, y0, x1, y1);
-    g.addColorStop(0, '#4F8EF7');
-    g.addColorStop(1, '#A78BFA');
+    g.addColorStop(0, '#00E5C8');
+    g.addColorStop(1, '#7C6AF7');
     return g;
   }
 
-  const s = size / 192; // scale factor
+  const s = size / 192;
 
-  // Lock body
   ctx.beginPath();
-  ctx.roundRect(56 * s, 100 * s, 80 * s, 58 * s, 10 * s);
-  ctx.fillStyle = accentGrad(56 * s, 0, 136 * s, 0);
-  ctx.fill();
-
-  // Shackle (open — offset right side up)
-  ctx.beginPath();
-  ctx.moveTo(72 * s, 100 * s);
-  ctx.lineTo(72 * s, 76 * s);
-  ctx.quadraticCurveTo(72 * s, 52 * s, 96 * s, 52 * s);
-  ctx.quadraticCurveTo(118 * s, 52 * s, 118 * s, 70 * s);
-  ctx.strokeStyle = accentGrad(72 * s, 0, 118 * s, 0);
+  ctx.moveTo(64 * s, 100 * s);
+  ctx.lineTo(64 * s, 76 * s);
+  ctx.quadraticCurveTo(64 * s, 52 * s, 96 * s, 52 * s);
+  ctx.quadraticCurveTo(128 * s, 52 * s, 128 * s, 72 * s);
+  ctx.strokeStyle = accentGrad(64 * s, 0, 128 * s, 0);
   ctx.lineWidth = 12 * s;
   ctx.lineCap = 'round';
   ctx.stroke();
 
-  // Keyhole circle
+  ctx.globalAlpha = 0.18;
   ctx.beginPath();
-  ctx.arc(96 * s, 124 * s, 10 * s, 0, Math.PI * 2);
-  ctx.fillStyle = '#0D0F14';
+  ctx.roundRect(50 * s, 96 * s, 92 * s, 62 * s, 14 * s);
+  ctx.fillStyle = accentGrad(50 * s, 0, 142 * s, 0);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  ctx.beginPath();
+  ctx.roundRect(50 * s, 96 * s, 92 * s, 62 * s, 14 * s);
+  ctx.strokeStyle = accentGrad(50 * s, 0, 142 * s, 0);
+  ctx.lineWidth = 3 * s;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(96 * s, 120 * s, 11 * s, 0, Math.PI * 2);
+  ctx.fillStyle = accentGrad(85 * s, 0, 107 * s, 0);
   ctx.fill();
 
-  // Keyhole slot
   ctx.beginPath();
-  ctx.roundRect(92 * s, 124 * s, 8 * s, 14 * s, 3 * s);
-  ctx.fillStyle = '#0D0F14';
+  ctx.roundRect(91 * s, 120 * s, 10 * s, 16 * s, 3 * s);
+  ctx.fillStyle = accentGrad(85 * s, 0, 107 * s, 0);
   ctx.fill();
 
   return canvas.toBuffer('image/png');
